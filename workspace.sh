@@ -12,17 +12,6 @@ source "${libFile}"
 
 wsSourceFile "${WORKSPACE_HOME_DIR}/workspace.env.sh"
 
-function actionError() {
-  local msgPrefix="action_${pAction}"
-  if [ $# -gt 1 ]
-  then
-    msgPrefix="${msgPrefix} | $1"
-    shift
-  fi
-  wsError "${msgPrefix}" "$@"
-  exit 1
-}
-
 
 function item_sail() {
   local zItem="$1" && shift
@@ -107,7 +96,7 @@ function action_up() {
   then
     echo "Get SUDO access"
     sudo ls > /dev/null
-    [ $? -ne 0 ] && actionError "Failed to get SUDO access"
+    [ $? -ne 0 ] && wsActionError "Failed to get SUDO access"
     sudo ${WORKSPACE_HOME_DIR}/iptables-config.sh
   else
     echo ""
@@ -179,16 +168,16 @@ ${WORKSPACE_IF_DOCKER_IP}  gateway.docker.internal
 }
 
 function action_hosts() {
-  [ -z "${WORKSPACE_IF_HOST}" ] && actionError "WORKSPACE_IF_HOST not supplied"
+  [ -z "${WORKSPACE_IF_HOST}" ] && wsActionError "WORKSPACE_IF_HOST not supplied"
   WORKSPACE_IF_HOST_IP="$(ip address show dev ${WORKSPACE_IF_HOST} | grep 'inet ' | sed 's/[[:blank:]]*inet[[:blank:]]*//g' | cut -d'/' -f 1)"
-  [ -z "${WORKSPACE_IF_HOST_IP}" ] && actionError "Unable to get IP from: ${WORKSPACE_IF_HOST}"
+  [ -z "${WORKSPACE_IF_HOST_IP}" ] && wsActionError "Unable to get IP from: ${WORKSPACE_IF_HOST}"
 
-  [ -z "${WORKSPACE_IF_DOCKER}" ] && actionError "WORKSPACE_IF_DOCKER not supplied"
+  [ -z "${WORKSPACE_IF_DOCKER}" ] && wsActionError "WORKSPACE_IF_DOCKER not supplied"
   WORKSPACE_IF_DOCKER_IP="$(ip address show dev ${WORKSPACE_IF_DOCKER} | grep 'inet ' | sed 's/[[:blank:]]*inet[[:blank:]]*//g' | cut -d'/' -f 1)"
-  [ -z "${WORKSPACE_IF_DOCKER_IP}" ] && actionError "Unable to get IP from: ${WORKSPACE_IF_DOCKER}"
+  [ -z "${WORKSPACE_IF_DOCKER_IP}" ] && wsActionError "Unable to get IP from: ${WORKSPACE_IF_DOCKER}"
 
   service docker status &> /dev/null || service docker start
-  [ $? -ne 0 ] && actionError "Failed to certify docker service"
+  [ $? -ne 0 ] && wsActionError "Failed to certify docker service"
 
   hosts_file "/etc/hosts"
   cat -s "${WORKSPACE_HOSTS_FILE}" | sudo tee /etc/hosts > /dev/null
@@ -198,7 +187,7 @@ function action_hosts() {
   if grep -q microsoft /proc/version
   then
     local winHostsFile="$(wslpath -u $(cmd.exe /c echo "%WINDIR%/System32/drivers/etc/hosts") | tr -d '\r\n\000')"
-    [ ! -f "${winHostsFile}" ] && actionError "File not found, ${winHostFile}"
+    [ ! -f "${winHostsFile}" ] && wsActionError "File not found, ${winHostFile}"
     local winHostsFileWsl="$(mktemp)"
     cp "${winHostsFile}" "${winHostsFileWsl}"
     dos2unix "${winHostsFileWsl}"
