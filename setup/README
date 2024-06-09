@@ -1,0 +1,4 @@
+#-- DBUS Problem
+DBUS fail to include some apps via X2GO
+Possible solution:
+  env DBUS_SESSION_BUS_ADDRESS="" firefox
