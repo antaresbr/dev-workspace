@@ -186,8 +186,13 @@ function action_hosts() {
 
   if grep -q microsoft /proc/version
   then
-    local winHostsFile="$(wslpath -u $(cmd.exe /c echo "%WINDIR%/System32/drivers/etc/hosts") | tr -d '\r\n\000')"
-    [ ! -f "${winHostsFile}" ] && wsActionError "File not found, ${winHostFile}"
+    local winDir="$(cmd.exe /c echo "%WINDIR%" 2> /dev/null | tr -d '\r\n\000')"
+    [ -n "${winDir}" ] || wsActionError "Unable to get WINDIR"
+    [ -d "${winDir}" ] || wsActionError "Directory not found, ${winDir}"
+
+    local winHostsFile="$(wslpath -u "${winDir}/System32/drivers/etc/hosts")"
+    [ -f "${winHostsFile}" ] || wsActionError "File not found, ${winHostsFile}"
+
     local winHostsFileWsl="$(mktemp)"
     cp "${winHostsFile}" "${winHostsFileWsl}"
     dos2unix "${winHostsFileWsl}"
