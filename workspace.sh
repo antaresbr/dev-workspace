@@ -188,7 +188,6 @@ function action_hosts() {
   then
     local winDir="$(cmd.exe /c echo "%WINDIR%" 2> /dev/null | tr -d '\r\n\000')"
     [ -n "${winDir}" ] || wsActionError "Unable to get WINDIR"
-    [ -d "${winDir}" ] || wsActionError "Directory not found, ${winDir}"
 
     local winHostsFile="$(wslpath -u "${winDir}/System32/drivers/etc/hosts")"
     [ -f "${winHostsFile}" ] || wsActionError "File not found, ${winHostsFile}"
