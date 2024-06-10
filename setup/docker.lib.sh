@@ -15,7 +15,7 @@ sudo apt update
 sudo apt --yes install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo usermod -aG docker "${USER}"
 
-sudo service docker status || sudo service docker start
+sudo systemctl --no-pager status docker || sudo systemctl --no-pager start docker
 [ $? -ne 0 ] && echo "ERRO: Falha ao iniciar serviço docker" && exit 1
 
 [ ! -f ~/.profile ] && touch ~/.profile
