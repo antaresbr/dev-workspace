@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Obtém credenciais SUDO"
+echo "Get SUDO credentials"
 sudo ls -alF > /dev/null
 
 source base.lib.sh
