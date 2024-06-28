@@ -49,7 +49,7 @@ function service_setup() {
 ENV_FILE="workspace.env.sh"
 
 #-- template
-templateFile "${ENV_FILE}"
+wsTemplateFile "${ENV_FILE}"
 
 #-- mode
 
