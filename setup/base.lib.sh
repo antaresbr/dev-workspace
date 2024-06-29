@@ -29,7 +29,7 @@ sudo apt update
 sudo apt -y upgrade
 
 #-- required pakages
-sudo apt install -y dos2unix git iproute2 vim
+sudo apt install -y dos2unix git iproute2 jq vim
 
 #-- .gitconfig
 echo ""
