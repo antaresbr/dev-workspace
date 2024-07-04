@@ -176,7 +176,7 @@ function action_hosts() {
   WORKSPACE_IF_DOCKER_IP="$(ip address show dev ${WORKSPACE_IF_DOCKER} | grep 'inet ' | sed 's/[[:blank:]]*inet[[:blank:]]*//g' | cut -d'/' -f 1)"
   [ -z "${WORKSPACE_IF_DOCKER_IP}" ] && wsActionError "Unable to get IP from: ${WORKSPACE_IF_DOCKER}"
 
-  service docker status &> /dev/null || service docker start
+  systemctl --no-pager status docker || sudo systemctl --no-pager start docker
   [ $? -ne 0 ] && wsActionError "Failed to certify docker service"
 
   hosts_file "/etc/hosts"
