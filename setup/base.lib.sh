@@ -29,7 +29,7 @@ sudo apt update
 sudo apt -y upgrade
 
 #-- required pakages
-sudo apt install -y dos2unix git iproute2 jq vim
+sudo apt install -y dos2unix dnsutils git iproute2 jq net-tools vim
 
 #-- .gitconfig
 echo ""

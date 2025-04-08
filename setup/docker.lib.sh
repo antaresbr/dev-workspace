@@ -29,3 +29,6 @@ then
 fi
 " >> ~/.profile
 fi
+
+#-- docker group
+sudo usermod -aG docker "${USER}"
